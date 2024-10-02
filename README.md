@@ -1,0 +1,1 @@
+# CSP_extract_inline_resources
