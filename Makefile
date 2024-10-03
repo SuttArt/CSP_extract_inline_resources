@@ -8,6 +8,7 @@ install:
 
 # Run the main script
 start:
+ifeq ($(OS),Windows_NT)
 	@if not defined HTML_FILE ( \
 		echo. && echo ERROR: No HTML file provided! && \
 		echo Usage: make start HTML_FILE=tests/test_file1.html && echo. && \
@@ -15,6 +16,17 @@ start:
 	) else ( \
 		python -m $(PACKAGE_NAME).main $(HTML_FILE) \
 	)
+else
+	@if [ -z "$(HTML_FILE)" ]; then \
+		echo ""; \
+		echo "ERROR: No HTML file provided!"; \
+		echo "Usage: make start HTML_FILE=index.html"; \
+		echo ""; \
+		exit 1; \
+	else \
+		python -m $(PACKAGE_NAME).main $(HTML_FILE); \
+	fi
+endif
 
 # Build the Docker image
 docker-build:
