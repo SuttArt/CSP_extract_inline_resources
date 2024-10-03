@@ -17,13 +17,62 @@ This project aims to automate the process of extracting inline resources into ex
 - Saves extracted resources as external files.
 - Updates the HTML file to link external resources.
 
-## How to Build This Project
+## Prerequisites
 
-_TODO: Provide instructions on how to build and run the project._
+Before you begin, make sure you have the following installed on your system:
+
+1. **Python (Latest Version)**: This project requires the latest version of Python 3.x. You can download and install Python from the official website: [https://www.python.org/downloads/](https://www.python.org/downloads/).
+
+To verify that Python is installed and check the version, you can run the following command in your terminal or command prompt:
+
+```bash
+python --version
+```
+If pip is not installed, you can install it by following the instructions here.
+
+2. **pip**: pip is the Python package installer, and it usually comes with Python by default. 
+
+To verify that pip is installed, run:
+```bash
+pip --version
+```
+If pip is not installed, you can install it by following the instructions here : [https://pip.pypa.io/en/stable/installation/](https://pip.pypa.io/en/stable/installation/).
+3. **venv Module**: Ensure that the venv module is installed. This module comes bundled with Python 3.x by default. 
+ 
+You can verify its presence by running:
+```bash
+python -m venv --help
+```
+- **Create and Activate a Virtual Environment**: Once Python and `venv` are available, you should create and activate a virtual environment for the project. This will ensure all dependencies are installed in an isolated environment.
+
+To create and activate the virtual environment:
+
+On Unix/macOS:
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+On Windows:
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
+After activating the virtual environment, your terminal prompt will change, indicating that the virtual environment is active. From here, you can proceed to install the project dependencies.
+
+## Installation
+
+Once the prerequisites are done, you can install the project dependencies using the following command:
+```bash
+pip install -r requirements.txt
+```
 
 ## Usage
 
 _TODO: Provide usage examples and how to run the tool._
+
+## How to Build This Project
+
+_TODO: Provide instructions on how to build and run the project._
 
 ## Testing
 
