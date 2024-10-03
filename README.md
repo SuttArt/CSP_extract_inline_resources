@@ -66,7 +66,13 @@ Once the prerequisites are done, you can install the project dependencies using 
 pip install -r requirements.txt
 ```
 
+Or with Makefile:
+```bash
+make install
+```
+
 ## Usage
+Once the prerequisites are done, you can do the following actions:
 
 ### Running the Program
 To run the program with a specific HTML file, use the following command:
