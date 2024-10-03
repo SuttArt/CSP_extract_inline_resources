@@ -43,7 +43,7 @@ You can verify its presence by running:
 ```bash
 python -m venv --help
 ```
-- **Create and Activate a Virtual Environment**: Once Python and `venv` are available, you should create and activate a virtual environment for the project. This will ensure all dependencies are installed in an isolated environment.
+4. **Create and Activate a Virtual Environment**: Once Python and `venv` are available, you should create and activate a virtual environment for the project. This will ensure all dependencies are installed in an isolated environment.
 
 To create and activate the virtual environment:
 
@@ -68,11 +68,32 @@ pip install -r requirements.txt
 
 ## Usage
 
-_TODO: Provide usage examples and how to run the tool._
+### Running the Program
+To run the program with a specific HTML file, use the following command:
+```bash
+python csp_extractor/main.py index.html
+```
 
-## How to Build This Project
+You can also use Makefile to run it:
+```bash
+make start HTML_FILE=index.html
+```
 
-_TODO: Provide instructions on how to build and run the project._
+### Building the Binary
+
+You can also create a standalone binary for your system using PyInstaller.
+
+To build the binary, run:
+```bash
+pyinstaller --onefile csp_extractor/main.py
+```
+
+You can also use Makefile to build it:
+```bash
+make build-binary
+```
+
+The generated binary will be available in the dist/ directory.
 
 ## Testing
 
