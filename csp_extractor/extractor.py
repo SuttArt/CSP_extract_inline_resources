@@ -13,7 +13,7 @@ def extract_resources(html_file):
     soup = BeautifulSoup(html_content, 'html.parser')
 
     #print(soup)
-    #print(soup.style.string)
+    print(soup.style.string)
 
 
 def create_dist_structure():
