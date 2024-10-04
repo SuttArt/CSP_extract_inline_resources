@@ -59,6 +59,7 @@
     </style>
 </head>
 <body>
+
 <header>
     <h1>Willkommen auf meiner Webseite</h1>
 </header>
@@ -74,11 +75,23 @@
     <h3>Just some Text</h3>
     <p style="font-size: 30pt">Dies ist eine einfache Webseite, die in einem Apache-Server in einem Docker-Container läuft. Sie dient als Demonstration, wie man eine Webseite in einem Container hosten kann.</p>
     <p style="color: red">Du kannst diese Webseite beliebig erweitern und anpassen. Docker ist eine großartige Möglichkeit, Webanwendungen zu isolieren und portabel zu machen.</p>
+    <p>Counter with inline script: <div id="counter">0</div></p>
+    <button onclick='alert("Inline Script")'>Push</button> Push button to call alert
+    <a href="javascript:alert('This is a link');">Click this link</a>
 </section>
 
 <footer>
     &copy; 2024 Meine Webseite. Alle Rechte vorbehalten.
 </footer>
-
+<script>
+    let count = 0;
+    setInterval(function() {
+        count++;
+        document.getElementById('counter').innerText = count;
+    }, 1000);
+</script>
+<script>
+alert("Internal Script");
+</script>
 </body>
 </html>

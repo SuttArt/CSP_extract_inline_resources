@@ -1,5 +1,6 @@
 import os
 from bs4 import BeautifulSoup
+from csp_extractor.js_extractor import *
 from csp_extractor.css_extractor import *
 
 def extract_resources(html_file):
@@ -15,8 +16,20 @@ def extract_resources(html_file):
 
     soup = extract_all_css(soup, paths)
 
-    write_html_file(paths["html_file"], soup)
+    # JS Filter region
+    js_filter = JSExtractor(paths["js_file"])
+    soup = js_filter.script_tag_filter(soup)
 
+
+    # HTML region
+    #Add <script src="index.js" defer></script>
+    new_tag = soup.new_tag("script")
+    new_tag["src"] = os.path.basename(paths["js_file"])
+    soup.head.append(new_tag)
+    print(soup.head)
+
+    with open(paths["html_file"], 'a', encoding='utf-8') as f:
+        f.write(soup.prettify())
 
 def create_dist_structure():
     # Define the directory and file paths
@@ -39,7 +52,7 @@ def create_dist_structure():
         # Get the absolute path of the file
         absolute_path = os.path.abspath(file_path)
 
-        open(file_path, 'a')
+        open(file_path, 'w')
         if file.endswith(".html"):
             return_struct["html_file"] = absolute_path
         elif file.endswith(".css"):
