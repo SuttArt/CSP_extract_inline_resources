@@ -107,8 +107,11 @@ _TODO: Provide instructions on testing the project and expected outcomes._
 
 ## Dependencies
 
-_TODO: List all dependencies required for this project._
-
+If you add some dependencies, make sure to update the `requirements.txt` file. This will allow others to install the exact same dependencies when setting up the project. 
+```bash
+pip freeze > requirements.txt
+```
+This command will save the current state of all installed packages (including version numbers) into requirements.txt. It is good practice to do this after adding new dependencies to ensure your project remains consistent across different environments.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
