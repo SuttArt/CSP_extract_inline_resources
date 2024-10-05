@@ -1,9 +1,10 @@
 import os
 from bs4 import BeautifulSoup
-
+from csp_extractor.css_extractor import *
 
 def extract_resources(html_file):
-    pathes = create_dist_structure()
+    paths = create_dist_structure()
+
     # Logic to read the HTML file and extract inline resources
     print(f"Processing {html_file}...")
 
@@ -12,9 +13,25 @@ def extract_resources(html_file):
 
     soup = BeautifulSoup(html_content, 'html.parser')
 
-    #print(soup)
-    print(soup.style.string)
+    # soup.style = <style> ... content <style/>
+    # soup.style.string = content without tags
 
+    style_tag_list = extract_style_tags(soup)
+    css_content = css_tags_to_string(style_tag_list)
+    if css_content != "":
+        add_link_to_html_header(soup, "main.css")
+        #bug with full absolut path, using name for now
+
+    print(soup.prettify())
+
+    # iterates through the tree to find all tags that have a style attribute
+    #style_tag_list = soup.findAll(is_style_attr)
+    #for tag in style_tag_list:
+        #print(tag["style"] + " " + tag.name)
+
+    # if time, clean up files with whitespaces and false indent
+    write_css_file(paths["css_file"], css_content)
+    write_html_file(paths["html_file"], soup)
 
 def create_dist_structure():
     # Define the directory and file paths
