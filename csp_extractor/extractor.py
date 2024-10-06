@@ -13,25 +13,21 @@ def extract_resources(html_file):
 
     soup = BeautifulSoup(html_content, 'html.parser')
 
-    # soup.style = <style> ... content <style/>
-    # soup.style.string = content without tags
-
     style_tag_list = extract_style_tags(soup)
     css_content = css_tags_to_string(style_tag_list)
     if css_content != "":
-        add_link_to_html_header(soup, "main.css")
-        #bug with full absolut path, using name for now
+        add_link_to_html_header(soup, os.path.basename(paths["css_file"]))
 
-    print(soup.prettify())
+    write_file(paths["css_file"], css_content, "w")
 
-    # iterates through the tree to find all tags that have a style attribute
-    #style_tag_list = soup.findAll(is_style_attr)
-    #for tag in style_tag_list:
-        #print(tag["style"] + " " + tag.name)
+    inline_style_tags = find_inline_style(soup)
+    inline_css_content = inline_dict_to_string(inline_style_tags)
 
-    # if time, clean up files with whitespaces and false indent
-    write_css_file(paths["css_file"], css_content)
+    write_file(paths["css_file"], inline_css_content , "a")
+
     write_html_file(paths["html_file"], soup)
+
+    #use soup for further modification and saving
 
 def create_dist_structure():
     # Define the directory and file paths
