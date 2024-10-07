@@ -19,6 +19,10 @@ def extract_resources(html_file):
     # JS Filter region
     js_filter = JSExtractor(paths["js_file"])
     soup = js_filter.script_tag_filter(soup)
+    soup = js_filter.event_handler_filter(soup)
+
+    # last function - write all in JS file:
+    js_filter.write_js_file()
 
 
     # HTML region
@@ -26,7 +30,6 @@ def extract_resources(html_file):
     new_tag = soup.new_tag("script")
     new_tag["src"] = os.path.basename(paths["js_file"])
     soup.head.append(new_tag)
-    print(soup.head)
 
     with open(paths["html_file"], 'a', encoding='utf-8') as f:
         f.write(soup.prettify())
