@@ -1,29 +1,37 @@
-import hashlib
+import hashlib  # Importing hashlib to generate unique names for functions based on content hashes
+
 
 class JSExtractor:
     def __init__(self, file_path):
+        # Path where the extracted JavaScript will be saved
         self.file_path = file_path
-        # List of <script> tags; each object is of type `bs4.element.Script`
+        # List to store the contents of extracted <script> tags and generated functions
         self.inline_scripts = []
 
+    # Write the extracted and generated JavaScript to the file
     def write_js_file(self):
+        # Open the specified file in append mode and write each script or function
         with open(self.file_path, 'a') as f:
             for script in self.inline_scripts:
                 f.write(script)
 
-    # Inline <script> Tag
+    # Extract and remove inline <script> tags from the HTML
     def script_tag_filter(self, soup):
+        # Find all <script> tags in the parsed HTML
         scripts = soup.find_all("script")
 
-        # Iterate over each <script> tag and print it
+        # Iterate over each <script> tag, extract it, and store its content
         for script in scripts:
-            script = script.extract()
-            self.inline_scripts.append(script.string)
+            script = script.extract()  # Remove the script tag from the DOM
+            self.inline_scripts.append(script.string)  # Append the script content to the inline_scripts list
 
+        # Return the modified HTML without the <script> tags
         return soup
 
-    # Inline Event Handlers
+    # Handle inline event handlers (like onclick, onmouseover, etc.) and extract their JavaScript
     def event_handler_filter(self, soup):
+        # List of all possible event handler attributes in HTML
+        # For details:
         # https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes#event_handler_attributes
         # https://html.spec.whatwg.org/multipage/webappapis.html#event-handlers-on-elements,-document-objects,-and-window-objects
         event_handlers = [
@@ -123,24 +131,31 @@ class JSExtractor:
             "onreadystatechange",
             "onvisibilitychange"
         ]
+
+        # Find all tags in the HTML
         tags = soup.find_all()
 
+        # Iterate through each tag and check if it has any event handler attributes
         for tag in tags:
             for attr, value in tag.attrs.items():
                 if attr in event_handlers:
+                    # Generate a unique function name by hashing the event handler's JavaScript code
                     hash_func_name = hashlib.md5(value.encode()).hexdigest()
-                    # JS Function must start with an char
+
+                    # Ensure function name starts with a letter and end with parentheses
                     hash_func_name = "f" + hash_func_name + "()"
 
+                    # Create the new JavaScript function definition
                     new_function = "function " + hash_func_name + " { " + value + " }\n"
 
-                    # modify tag’s attribute
+                    # Modify the tag’s event handler attribute to call the newly created function
                     tag.attrs[attr] = hash_func_name
 
-                    # append new function to script List
+                    # Append the new function to the inline_scripts list, if it hasn't been added already
                     if new_function not in self.inline_scripts:
                         self.inline_scripts.append(new_function)
 
+        # Return the modified HTML with event handlers replaced by function calls
         return soup
 
 # JavaScript in HTML Attributes
