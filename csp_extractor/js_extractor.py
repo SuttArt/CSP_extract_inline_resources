@@ -24,6 +24,7 @@ class JSExtractor:
 
     # Inline Event Handlers
     def event_handler_filter(self, soup):
+        # https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes#event_handler_attributes
         # https://html.spec.whatwg.org/multipage/webappapis.html#event-handlers-on-elements,-document-objects,-and-window-objects
         event_handlers = [
             "onabort",
@@ -94,7 +95,33 @@ class JSExtractor:
             "onwebkitanimationiteration",
             "onwebkitanimationstart",
             "onwebkittransitionend",
-            "onwheel"
+            "onwheel",
+            "onblur",
+            "onerror",
+            "onfocus",
+            "onload",
+            "onresize",
+            "onscroll",
+            "onafterprint",
+            "onbeforeprint",
+            "onbeforeunload",
+            "onhashchange",
+            "onlanguagechange",
+            "onmessage",
+            "onmessageerror",
+            "onoffline",
+            "ononline",
+            "onpageswap",
+            "onpagehide",
+            "onpagereveal",
+            "onpageshow",
+            "onpopstate",
+            "onrejectionhandled",
+            "onstorage",
+            "onunhandledrejection",
+            "onunload",
+            "onreadystatechange",
+            "onvisibilitychange"
         ]
         tags = soup.find_all()
 
