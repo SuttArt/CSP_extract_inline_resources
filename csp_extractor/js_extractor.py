@@ -159,6 +159,9 @@ class JSExtractor:
         return soup
 
 # JavaScript in HTML Attributes
+# For details:
+# https://developer.mozilla.org/en-US/docs/Web/URI/Schemes/javascript
+# https://html.spec.whatwg.org/multipage/browsing-the-web.html#the-javascript:-url-special-case
 
 
 # Dynamic Inline Script Generation

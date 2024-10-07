@@ -2,7 +2,9 @@
 FROM httpd:2.4
 
 # Copy your website into Apache's default directory
-COPY ./tests/index.html /usr/local/apache2/htdocs/
+COPY ./www_dist/index.html /usr/local/apache2/htdocs/
+COPY ./www_dist/index.js /usr/local/apache2/htdocs/
+COPY ./www_dist/main.css /usr/local/apache2/htdocs/
 
 # Copy the custom Apache configuration file into the container
 COPY ./apache/apache-config.conf /usr/local/apache2/conf/extra/apache-config.conf
