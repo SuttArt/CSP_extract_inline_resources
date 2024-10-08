@@ -66,11 +66,6 @@ Once the prerequisites are done, you can install the project dependencies using 
 pip install -r requirements.txt
 ```
 
-Or with Makefile:
-```bash
-make install
-```
-
 ## Usage
 Once the prerequisites are done, you can do the following actions:
 
@@ -78,11 +73,6 @@ Once the prerequisites are done, you can do the following actions:
 To run the program with a specific HTML file, use the following command:
 ```bash
 python csp_extractor/main.py index.html
-```
-
-You can also use Makefile to run it:
-```bash
-make start HTML_FILE=index.html
 ```
 
 ### Building the Binary
@@ -94,12 +84,50 @@ To build the binary, run:
 pyinstaller --onefile csp_extractor/main.py
 ```
 
-You can also use Makefile to build it:
-```bash
-make build-binary
-```
-
 The generated binary will be available in the dist/ directory.
+
+## Docker
+
+This project can also be built and deployed using Docker. There are three main workflows for using Docker in this project:
+
+1. **Running Apache Server Only**
+    ```bash
+   docker build -t apache-webseite -f .docker/apache/Dockerfile .
+   ```
+    ```bash
+   docker run -dit --name apache-server -p 8080:80 apache-webseite
+   ```
+   **Explanation**:  
+   This step builds a Docker image using the Apache configuration specified in the `Dockerfile` located in the `.docker/apache/` directory. The `docker run` command starts a container named `apache-server`, exposing it on port 8080 of your host machine and mapping it to port 80 inside the container where Apache is running.
+
+   You can build and run the Apache web server using appropriate Docker commands.
+
+2. **Building the Binary and Starting the Server**
+    ```bash
+   docker build -t build_and_serve -f .docker/Dockerfile .
+   ```
+    ```bash
+   docker run -dit --name apache-server-build -p 8080:80 build_and_serve
+   ```
+   **Explanation**:  
+   This command sequence builds the binary, prepares it to extract inline resources, and then starts an Apache server to serve the processed HTML content. The `build_and_serve` Docker image handles both the binary creation and the serving of the generated files in a single step.
+
+   To build the binary and serve the generated files via Apache, use the corresponding Docker commands.
+
+3. **Creating Only the Binary**
+    ```bash
+   docker build -t csp_extractor_build -f .docker/bin/Dockerfile .
+   ```
+    ```bash
+   docker run --name binary_container csp_extractor_build
+   ```
+    ```bash
+   docker cp binary_container:/output/ ./bin 
+   ```
+   **Explanation**:  
+   This process builds the binary using the configuration specified in `.docker/bin/Dockerfile`. After running the container, the `docker cp` command copies the binary from the container's `/output/` directory to the `./bin` directory on your host machine. You can then use the binary independently or as part of another workflow.
+
+   To create the binary and copy it to your host machine, follow the appropriate Docker steps.
 
 ## Testing
 
