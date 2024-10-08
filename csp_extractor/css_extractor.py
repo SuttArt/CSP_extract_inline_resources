@@ -1,3 +1,4 @@
+import os
 import uuid
 
 def write_file(file_name, content, mode):
@@ -38,7 +39,6 @@ def css_tags_to_string(tag_list):
         css_content += tag.string
     return css_content
 
-# just stylesheet name not the full path, test bug if time
 def add_link_to_html_header(soup, stylesheet_name):
 
     new_link = soup.new_tag("link", rel="stylesheet", href=stylesheet_name)
@@ -52,3 +52,18 @@ def extract_style_tags(soup):
     for tag in list_style_tags:
         css_tags.append(tag.extract())
     return css_tags
+
+def extract_all_css(soup, paths):
+
+    style_tag_list = extract_style_tags(soup)
+    head_css_content = css_tags_to_string(style_tag_list)
+
+    inline_style_tags = find_inline_style(soup)
+    inline_css_content = inline_dict_to_string(inline_style_tags)
+
+    all_css_content = head_css_content + "\n" + inline_css_content
+
+    add_link_to_html_header(soup, os.path.basename(paths["css_file"]))
+    write_file(paths["css_file"], all_css_content, "w")
+
+    return soup
