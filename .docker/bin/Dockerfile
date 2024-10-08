@@ -28,10 +28,10 @@ RUN pyinstaller --onefile -n csp_extractor csp_extractor/main.py
 #WORKDIR /app
 
 # Install Python requirements
-RUN pip3 install --no-cache-dir -r requirements.txt
+#RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Create the Windows binary using Wine
-RUN #pyinstaller --onefile -n csp_extractor csp_extractor/main.py
+#RUN pyinstaller --onefile -n csp_extractor csp_extractor/main.py
 
 # Final stage to collect the built binaries
 FROM alpine:latest AS final-stage
