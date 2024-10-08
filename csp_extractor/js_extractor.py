@@ -230,3 +230,36 @@ class JSExtractor:
         return soup
 
 # Dynamic Inline Script Generation
+
+# Note: It is possible that one or more of the scripts may utilize Dynamic Inline Script Generation, which is not yet
+# covered in this tool due to time constraints. To fully handle this, a deep JavaScript parser would be required,
+# potentially involving the generation and analysis of the JavaScript Abstract Syntax Tree (AST).
+
+# Examples:
+
+# document.write('<script>alert("This is dynamically generated")</script>');
+# document.body.innerHTML += '<script>alert("Dynamic inline script")</script>';
+
+# var scriptContent = "alert('Executed dynamically using eval!');";
+# eval(scriptContent);
+
+# var dynamicFunc = new Function('alert("Dynamic function executed")');
+# dynamicFunc();
+
+# var script = document.createElement('script');
+# script.textContent = 'console.log("Dynamic script executed")';
+# document.body.appendChild(script);
+
+# <script src="https://example.com/data?callback=myFunction"></script>
+# <script>
+#   function myFunction(data) {
+#     console.log('Received data: ', data);
+#   }
+# </script>
+
+# var button = document.createElement('button');
+# button.innerHTML = 'Click me';
+# button.onclick = function() {
+#   alert('Dynamically added inline event handler');
+# };
+# document.body.appendChild(button);
