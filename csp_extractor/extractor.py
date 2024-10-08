@@ -24,6 +24,7 @@ def extract_resources(html_file):
     # Filter out script tags and event handlers and process them
     soup = js_filter.script_tag_filter(soup)
     soup = js_filter.event_handler_filter(soup)
+    soup = js_filter.js_url_filter(soup)
 
     # Write the extracted and processed JavaScript content to the JS file
     js_filter.write_js_file()

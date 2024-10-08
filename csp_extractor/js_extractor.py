@@ -173,10 +173,60 @@ class JSExtractor:
         # Return the modified HTML with event handlers replaced by function calls
         return soup
 
-# JavaScript in HTML Attributes
-# For details:
-# https://developer.mozilla.org/en-US/docs/Web/URI/Schemes/javascript
-# https://html.spec.whatwg.org/multipage/browsing-the-web.html#the-javascript:-url-special-case
+    # Handle inline JavaScript in URLs and extract their JavaScript
+    # For details:
+    # https://developer.mozilla.org/en-US/docs/Web/URI/Schemes/javascript
+    # https://html.spec.whatwg.org/multipage/browsing-the-web.html#the-javascript:-url-special-case
+    # javascript: URLs can be used anywhere a URL is a navigation target. This includes, but is not limited to:
+    # The href attribute of an <a> or <area> element.
+    # The action attribute of a <form> element.
+    # The src attribute of an <iframe> element.
+    # The window.location JavaScript property.
+    # The browser address bar itself.
+    def js_url_filter(self, soup):
+        # Find all tags in the HTML
+        tags = soup.find_all()
+        elements = {
+            "href": "click",
+            "action": "submit",
+            # src should not be used with combination of JS, we don't really hande this case
+            "src": "load"
+        }
 
+        # Iterate through each tag and check if it has any event handler attributes
+        for tag in tags:
+            # Iterate over a copy of tag.attrs.items() to avoid modifying the dictionary during iteration
+            for attr, value in list(tag.attrs.items()):
+                if attr in elements:
+                    if tag[attr].startswith("javascript:"):
+                        if 'id' not in tag.attrs:
+                            # Generate a UUID (random-based UUID) for the HTML tag if it does not have an ID
+                            unique_id = uuid.uuid4()
+
+                            # Convert the UUID to string and prefix with "id_" to ensure it's a valid HTML ID
+                            html_id = f"id_{unique_id}"
+
+                            tag["id"] = html_id  # Assign the generated ID to the tag
+
+                        value = value.replace("javascript:", "", 1)
+                        value = "event.preventDefault(); " + value
+
+                        if attr == "href":
+                            tag[attr] = "#"
+                        elif attr == "action":
+                            del tag.attrs[attr]
+                        elif attr == "src":
+                            tag[attr] = "about:blank"
+
+                        # Create an event listener function using the tag's ID, the event type, and the inline script
+                        # content
+                        new_function = self.__create_event_listener(tag["id"], elements[attr], value)
+
+                        # Append the new function to the inline_scripts list, if it hasn't been added already
+                        if new_function not in self.inline_scripts:
+                            self.inline_scripts.append(new_function)
+
+        # Return the modified HTML with event handlers replaced by function calls
+        return soup
 
 # Dynamic Inline Script Generation
