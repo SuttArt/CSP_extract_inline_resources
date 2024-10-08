@@ -32,6 +32,8 @@ def extract_resources(html_file):
     # Create a new <script> tag for the external JS file and append it to the <head> of the HTML document
     new_tag = soup.new_tag("script")
     new_tag["src"] = os.path.basename(paths["js_file"])
+    # None to not have any value, like <script src="index.js" defer></script>
+    new_tag["defer"] = None
     soup.head.append(new_tag)
 
     # Write the modified HTML (with externalized resources) to the output file

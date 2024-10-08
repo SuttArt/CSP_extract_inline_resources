@@ -1,4 +1,4 @@
-import hashlib  # Importing hashlib to generate unique names for functions based on content hashes
+import uuid  # Importing uuid for generating unique IDs for HTML elements
 
 
 class JSExtractor:
@@ -7,6 +7,12 @@ class JSExtractor:
         self.file_path = file_path
         # List to store the contents of extracted <script> tags and generated functions
         self.inline_scripts = []
+
+    # Private method to create event listener JavaScript code for a given element ID, event type, and content
+    def __create_event_listener(self, id, event, content):
+        event_listener = ("document.getElementById('" + id + "').addEventListener('" + event
+                          + "', function(event) { " + content + " })\n")
+        return event_listener
 
     # Write the extracted and generated JavaScript to the file
     def write_js_file(self):
@@ -34,122 +40,131 @@ class JSExtractor:
         # For details:
         # https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes#event_handler_attributes
         # https://html.spec.whatwg.org/multipage/webappapis.html#event-handlers-on-elements,-document-objects,-and-window-objects
-        event_handlers = [
-            "onabort",
-            "onauxclick",
-            "onbeforeinput",
-            "onbeforematch",
-            "onbeforetoggle",
-            "oncancel",
-            "oncanplay",
-            "oncanplaythrough",
-            "onchange",
-            "onclick",
-            "onclose",
-            "oncontextlost",
-            "oncontextmenu",
-            "oncontextrestored",
-            "oncopy",
-            "oncuechange",
-            "oncut",
-            "ondblclick",
-            "ondrag",
-            "ondragend",
-            "ondragenter",
-            "ondragleave",
-            "ondragover",
-            "ondragstart",
-            "ondrop",
-            "ondurationchange",
-            "onemptied",
-            "onended",
-            "onformdata",
-            "oninput",
-            "oninvalid",
-            "onkeydown",
-            "onkeypress",
-            "onkeyup",
-            "onloadeddata",
-            "onloadedmetadata",
-            "onloadstart",
-            "onmousedown",
-            "onmouseenter",
-            "onmouseleave",
-            "onmousemove",
-            "onmouseout",
-            "onmouseover",
-            "onmouseup",
-            "onpaste",
-            "onpause",
-            "onplay",
-            "onplaying",
-            "onprogress",
-            "onratechange",
-            "onreset",
-            "onscrollend",
-            "onsecuritypolicyviolation",
-            "onseeked",
-            "onseeking",
-            "onselect",
-            "onslotchange",
-            "onstalled",
-            "onsubmit",
-            "onsuspend",
-            "ontimeupdate",
-            "ontoggle",
-            "onvolumechange",
-            "onwaiting",
-            "onwebkitanimationend",
-            "onwebkitanimationiteration",
-            "onwebkitanimationstart",
-            "onwebkittransitionend",
-            "onwheel",
-            "onblur",
-            "onerror",
-            "onfocus",
-            "onload",
-            "onresize",
-            "onscroll",
-            "onafterprint",
-            "onbeforeprint",
-            "onbeforeunload",
-            "onhashchange",
-            "onlanguagechange",
-            "onmessage",
-            "onmessageerror",
-            "onoffline",
-            "ononline",
-            "onpageswap",
-            "onpagehide",
-            "onpagereveal",
-            "onpageshow",
-            "onpopstate",
-            "onrejectionhandled",
-            "onstorage",
-            "onunhandledrejection",
-            "onunload",
-            "onreadystatechange",
-            "onvisibilitychange"
-        ]
+        # Event handler mapping from attribute to event:
+        event_handlers = {
+            "onabort": "abort",
+            "onauxclick": "auxclick",
+            "onbeforeinput": "beforeinput",
+            "onbeforematch": "beforematch",
+            "onbeforetoggle": "beforetoggle",
+            "oncancel": "cancel",
+            "oncanplay": "canplay",
+            "oncanplaythrough": "canplaythrough",
+            "onchange": "change",
+            "onclick": "click",
+            "onclose": "close",
+            "oncontextlost": "contextlost",
+            "oncontextmenu": "contextmenu",
+            "oncontextrestored": "contextrestored",
+            "oncopy": "copy",
+            "oncuechange": "cuechange",
+            "oncut": "cut",
+            "ondblclick": "dblclick",
+            "ondrag": "drag",
+            "ondragend": "dragend",
+            "ondragenter": "dragenter",
+            "ondragleave": "dragleave",
+            "ondragover": "dragover",
+            "ondragstart": "dragstart",
+            "ondrop": "drop",
+            "ondurationchange": "durationchange",
+            "onemptied": "emptied",
+            "onended": "ended",
+            "onformdata": "formdata",
+            "oninput": "input",
+            "oninvalid": "invalid",
+            "onkeydown": "keydown",
+            "onkeypress": "keypress",
+            "onkeyup": "keyup",
+            "onloadeddata": "loadeddata",
+            "onloadedmetadata": "loadedmetadata",
+            "onloadstart": "loadstart",
+            "onmousedown": "mousedown",
+            "onmouseenter": "mouseenter",
+            "onmouseleave": "mouseleave",
+            "onmousemove": "mousemove",
+            "onmouseout": "mouseout",
+            "onmouseover": "mouseover",
+            "onmouseup": "mouseup",
+            "onpaste": "paste",
+            "onpause": "pause",
+            "onplay": "play",
+            "onplaying": "playing",
+            "onprogress": "progress",
+            "onratechange": "ratechange",
+            "onreset": "reset",
+            "onscrollend": "scrollend",
+            "onsecuritypolicyviolation": "securitypolicyviolation",
+            "onseeked": "seeked",
+            "onseeking": "seeking",
+            "onselect": "select",
+            "onslotchange": "slotchange",
+            "onstalled": "stalled",
+            "onsubmit": "submit",
+            "onsuspend": "suspend",
+            "ontimeupdate": "timeupdate",
+            "ontoggle": "toggle",
+            "onvolumechange": "volumechange",
+            "onwaiting": "waiting",
+            "onwebkitanimationend": "webkitAnimationEnd",
+            "onwebkitanimationiteration": "webkitAnimationIteration",
+            "onwebkitanimationstart": "webkitAnimationStart",
+            "onwebkittransitionend": "webkitTransitionEnd",
+            "onwheel": "wheel",
+            #
+            "onblur": "blur",
+            "onerror": "error",
+            "onfocus": "focus",
+            "onload": "load",
+            "onresize": "resize",
+            "onscroll": "scroll",
+            #
+            "onafterprint": "afterprint",
+            "onbeforeprint": "beforeprint",
+            "onbeforeunload": "beforeunload",
+            "onhashchange": "hashchange",
+            "onlanguagechange": "languagechange",
+            "onmessage": "message",
+            "onmessageerror": "messageerror",
+            "onoffline": "offline",
+            "ononline": "online",
+            "onpageswap": "pageswap",
+            "onpagehide": "pagehide",
+            "onpagereveal": "pagereveal",
+            "onpageshow": "pageshow",
+            "onpopstate": "popstate",
+            "onrejectionhandled": "rejectionhandled",
+            "onstorage": "storage",
+            "onunhandledrejection": "unhandledrejection",
+            "onunload": "unload",
+            #
+            "onreadystatechange": "readystatechange",
+            "onvisibilitychange": "visibilitychange"
+        }
 
         # Find all tags in the HTML
         tags = soup.find_all()
 
         # Iterate through each tag and check if it has any event handler attributes
         for tag in tags:
-            for attr, value in tag.attrs.items():
+            # Iterate over a copy of tag.attrs.items() to avoid modifying the dictionary during iteration
+            for attr, value in list(tag.attrs.items()):
                 if attr in event_handlers:
-                    # Generate a unique function name by hashing the event handler's JavaScript code
-                    hash_func_name = hashlib.md5(value.encode()).hexdigest()
+                    if 'id' not in tag.attrs:
+                        # Generate a UUID (random-based UUID) for the HTML tag if it does not have an ID
+                        unique_id = uuid.uuid4()
 
-                    # Ensure function name starts with a letter and end with parentheses
-                    hash_func_name = "f" + hash_func_name + "()"
+                        # Convert the UUID to string and prefix with "id_" to ensure it's a valid HTML ID
+                        html_id = f"id_{unique_id}"
 
-                    # Create the new JavaScript function definition
-                    new_function = "function " + hash_func_name + " { " + value + " }\n"
+                        tag["id"] = html_id  # Assign the generated ID to the tag
 
-                    # Modify the tag’s event handler attribute to call the newly created function
-                    tag.attrs[attr] = hash_func_name
+                    # Remove the tag’s inline event handler attribute (e.g., onclick, onmouseover)
+                    del tag.attrs[attr]
+
+                    # Create an event listener function using the tag's ID, the event type, and the inline script
+                    # content
+                    new_function = self.__create_event_listener(tag["id"], event_handlers[attr], value)
 
                     # Append the new function to the inline_scripts list, if it hasn't been added already
                     if new_function not in self.inline_scripts:
