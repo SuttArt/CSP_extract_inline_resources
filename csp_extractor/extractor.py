@@ -44,6 +44,8 @@ def extract_resources(html_file):
 def create_dist_structure():
     # Define the directory where the output files (HTML, CSS, JS) will be saved
     dist_dir = "www_dist"
+    # Define the directory where the output images will be saved
+    img_dir = os.path.join(dist_dir, "img")
 
     # File names for the output HTML, CSS, and JS files
     files = ["index.html", "main.css", "index.js"]
@@ -53,11 +55,16 @@ def create_dist_structure():
         "html_file": "",
         "css_file": "",
         "js_file": "",
+        "img_dir": os.path.abspath(img_dir),
     }
 
     # Create the dist_dir directory if it doesn't already exist
     if not os.path.exists(dist_dir):
         os.makedirs(dist_dir)
+
+    # Create the img_dir directory if it doesn't already exist
+    if not os.path.exists(img_dir):
+        os.makedirs(img_dir)
 
     # Create the three files inside dist_dir and store their absolute paths in return_struct
     for file in files:
