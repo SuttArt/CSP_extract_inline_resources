@@ -50,11 +50,6 @@ def extract_all_additional_data(soup, img_path):
     images = extract_images_from_html(soup)
 
     for img in images:
-        #print(f"Image Path: {img['src']}")
-        #print(f"Attributes: {img['attributes']}")
-        #print(f"Tag: {img['tag']}")
-        state = save_image_from_base64(img, img_path)
-
-        print(state)
+        save_image_from_base64(img, img_path)
 
     return soup
