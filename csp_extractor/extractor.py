@@ -22,8 +22,7 @@ def extract_resources(html_file):
     soup = extract_all_css(soup, paths)
 
     #Addtional data filter region | Starting with images, still needs improvement
-    print(paths["img_dir"])
-    soup = extract_all_additional_data(soup, paths["img_dir"])
+    soup = extract_all_additional_data(soup, paths)
 
     # JS Filter region
     js_filter = JSExtractor(paths["js_file"])  # Initialize JS extractor with the JS output file path
