@@ -24,9 +24,7 @@ RUN ./dist/csp_extractor ./tests/index.html
 FROM httpd:2.4
 
 # Copy the generated web files from the previous stage
-COPY --from=file-generator /app/www_dist/index.html /usr/local/apache2/htdocs/
-COPY --from=file-generator /app/www_dist/index.js /usr/local/apache2/htdocs/
-COPY --from=file-generator /app/www_dist/main.css /usr/local/apache2/htdocs/
+COPY --from=file-generator /app/www_dist/ /usr/local/apache2/htdocs/
 
 # Copy the custom Apache configuration file into the container
 COPY ./apache/apache-config.conf /usr/local/apache2/conf/extra/apache-config.conf
