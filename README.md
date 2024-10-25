@@ -2,7 +2,7 @@
 
 ## Description
 
-This project is a task of the IT Security Workshop module.
+This [project](https://sarwiki.informatik.hu-berlin.de/CSP:_Umwandlung_von_Inline_/_Internal_CSS,_JS_und_DATA_in_externe_Ressourcen) is a task of the IT Security Workshop module. 
 
 CSP Extract Inline Resources is a tool designed to automate the process of transforming HTML files by extracting inline resources such as CSS, JavaScript, and data into separate external files. This ensures compatibility with strict Content Security Policies (CSP) that prohibit "unsafe-inline" content, improving security and allowing the HTML to render properly in environments where inline resources are blocked.
 
